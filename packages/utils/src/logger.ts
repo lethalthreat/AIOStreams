@@ -16,6 +16,7 @@ const moduleMap: { [key: string]: string } = {
   addon: '🧩  ADDON',
   parser: '🔍  PARSER',
   mediaflow: '🌊  MEDIAFLOW',
+  stremthru: '✨  STREMTHRU',
 };
 
 // Define colors for each log level
@@ -27,7 +28,7 @@ const levelColors: { [key: string]: string } = {
 };
 
 const emojiLevelMap: { [key: string]: string } = {
-  error: '🛑',
+  error: '❌',
   warn: '⚠️ ',
   info: '🔵',
   debug: '🐞',
@@ -65,7 +66,7 @@ export const createLogger = (module: string) => {
               .colorize()
               .colorize(level, `${level}`);
             const formatLine = (line: unknown) => {
-              return `${emoji} [${timestamp}] | ${coloredLevel} | ${formattedModule}${
+              return `${emoji} | ${coloredLevel} | ${timestamp} | ${formattedModule} ${
                 func ? ' (' + func + ')' : ''
               } > ${line}`;
             };
@@ -78,3 +79,10 @@ export const createLogger = (module: string) => {
     transports: [new winston.transports.Console()],
   });
 };
+
+export function maskSensitiveInfo(message: string) {
+  if (Settings.LOG_SENSITIVE_INFO) {
+    return message;
+  }
+  return '<redacted>';
+}
